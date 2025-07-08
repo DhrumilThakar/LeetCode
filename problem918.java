@@ -6,31 +6,29 @@ A subarray may only include each element of the fixed buffer nums at most once. 
 
 public class problem918{
     public static int maxSubarraySumCircular(int[] nums) {
-        int total = 0;
-        int maxSum = Integer.MIN_VALUE;
-        int minSum = Integer.MAX_VALUE;
-        int currentMax = 0;
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        int currentMax= 0;
         int currentMin = 0;
+        int total =0;
 
-        for (int num : nums) {
-            total += num;
+        for(int i =0;i<nums.length;i++){
+            total+=nums[i];
+            currentMax +=nums[i];
+            
+            max = Math.max(max,currentMax);
 
-            // Calculate maximum subarray sum using Kadane's algorithm
-            currentMax = Math.max(num, currentMax + num);
-            maxSum = Math.max(maxSum, currentMax);
+            if(currentMax<0){
+                currentMax=0;
+            }
 
-            // Calculate minimum subarray sum using Kadane's algorithm
-            currentMin = Math.min(num, currentMin + num);
-            minSum = Math.min(minSum, currentMin);
+            currentMin+=nums[i];
+            min = Math.min(min,currentMin);
+            if(currentMin>0){
+                currentMin =0;
+            }
         }
-
-        // If all numbers are negative, return the maximum subarray sum
-        if (maxSum < 0) {
-            return maxSum;
-        }
-
-        // Return the maximum of the two cases: normal max or total - min
-        return Math.max(maxSum, total - minSum);
+        return max<0?max:Math.max(max,total-min);
     }
     public static void main(String[] args) {
         int[] nums = {1, -2, 3, -2};
